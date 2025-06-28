@@ -39,3 +39,10 @@
 10. Memento Pattern
 11. Null Object Pattern
 12. Iterator Pattern
+
+## Chain of Responsibility Pattern
+    Chain of Responsibility Pattern is a behavioral design pattern that lets you pass request along a chain of handlers.
+    Upon receiving a request, each handler decides either to process the request or to pass it to the next handler in the chain.
+* Examples
+  1. Logging System
+  2. ATM Machine
