@@ -31,7 +31,7 @@ public class BookMyShow {
             }
         }
 
-        //3. get all show of this movie in Bangalore location
+        //3. get all show of this movie in Pune location
         Map<Theatre, List<Show>> showsTheatreWise = theaterController.getAllShows(interestedMovie, userCity);
 
         //4. select the particular show user is interested in
