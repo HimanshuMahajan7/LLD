@@ -101,3 +101,59 @@ Proxy: Logging after
 * Examples
   1. Logging System
   2. ATM Machine
+
+---
+### Null Object Pattern
+    The Null Object Pattern is a behavioral design pattern used to encapsulate the absence of an object by providing a substitutable alternative that offers suitable default "do nothing" behavior.
+    Instead of returning null or requiring explicit null checks throughout the client code, this pattern introduces a special "null object" that implements the same interface as the real object but provides empty or default implementations for its methods.
+
+* A null object replaces `NULL` return type.
+* No need to put if check for checking null
+* Null Object reflects do nothing or default behaviour.
+
+* In short, the Null Object Pattern is a behavioral design pattern that provides a non-functional default object in place of null.
+* It helps avoid NullPointerException and eliminates the need to check for null everywhere.
+
+💡 Intent:
+* Replace null with a neutral object that does nothing but conforms to the expected interface.
+
+✅ Benefits:
+| Feature              | Description                               |
+| -------------------- | ----------------------------------------- |
+| Avoids `null` checks | Eliminates `if (obj != null)` everywhere  |
+| Cleaner code         | No risk of `NullPointerException`         |
+| Implements interface | Behaves polymorphically with real objects |
+
+🧱 Structure:
+* Interface (e.g., NotificationService)
+* Real Implementation (e.g., EmailNotification)
+* Null Implementation (e.g., NullNotification) – does nothing
+
+✅ Example:
+```java
+interface NotificationService {
+    void send(String message);
+}
+
+class EmailNotification implements NotificationService {
+    public void send(String message) {
+        System.out.println("Sending email: " + message);
+    }
+}
+
+class NullNotification implements NotificationService {
+    public void send(String message) {
+        // do nothing
+    }
+}
+
+// Usage
+public NotificationService getService(User user) {
+    if (user == null) {
+        return new NullNotification();  // no-op object
+    } else {
+        return new EmailNotification();
+    }
+}
+
+```
