@@ -157,3 +157,76 @@ public NotificationService getService(User user) {
 }
 
 ```
+
+---
+
+### State Pattern
+    The State Design Pattern is a behavioral design pattern that allows an object to alter its behavior when its internal state changes.
+
+🔍 Intent:
+* Allow an object to behave differently based on its current state, and to change its behavior at runtime without using many if-else or switch statements.
+
+🧱 Structure:
+* **Context**: Maintains a reference to a State object and delegates behavior to it.
+* **State** (interface): Declares methods that concrete states will implement.
+* **ConcreteState**: Implements state-specific behavior.
+
+✅ Example: Document State (Draft → Moderation → Published)
+```java
+// State interface
+interface State {
+    void handle();
+}
+
+// Concrete States
+class DraftState implements State {
+    public void handle() {
+        System.out.println("Document is in Draft State.");
+    }
+}
+
+class ModerationState implements State {
+    public void handle() {
+        System.out.println("Document is under Moderation.");
+    }
+}
+
+class PublishedState implements State {
+    public void handle() {
+        System.out.println("Document is Published.");
+    }
+}
+
+// Context
+class Document {
+    private State currentState;
+
+    public void setState(State state) {
+        this.currentState = state;
+    }
+
+    public void applyState() {
+        currentState.handle();
+    }
+}
+```
+
+💡 Real-World Examples:
+| Scenario                | States                          |
+| ----------------------- | ------------------------------- |
+| TCP Connection          | Open, Closed, Listening         |
+| Media Player            | Playing, Paused, Stopped        |
+| Order Processing System | New, Packed, Shipped, Delivered |
+
+✅ Benefits:
+| Advantage             | Description                                    |
+| --------------------- | ---------------------------------------------- |
+| Avoids if-else chains | No need for long conditionals for state logic  |
+| Clean separation      | Each state is self-contained                   |
+| Easy to extend        | Add new states without modifying existing code |
+
+🚫 Drawbacks:
+* Can result in lots of classes if there are many states.
+* Slightly complex setup compared to simple switch statements.
+
+---
