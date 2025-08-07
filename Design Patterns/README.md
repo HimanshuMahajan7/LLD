@@ -100,7 +100,7 @@ Proxy: Logging after
     Upon receiving a request, each handler decides either to process the request or to pass it to the next handler in the chain.
 * Examples
   1. Logging System
-  2. ATM Machine
+  2. ATM Machine - Cash Withdrawal
 
 ---
 ### Null Object Pattern
@@ -228,5 +228,29 @@ class Document {
 🚫 Drawbacks:
 * Can result in lots of classes if there are many states.
 * Slightly complex setup compared to simple switch statements.
+
+---
+
+### Composite Pattern
+    The Composite Design Pattern is a structural pattern used to represent part-whole hierarchies. It lets clients treat individual objects and compositions of objects uniformly.
+    In other words, whether dealing with a single object or a group of objects (composite), clients can use them interchangeably.
+
+💡 Intent:
+* "Compose objects into tree structures to represent part-whole hierarchies."
+
+🔍 Real-World Examples:
+| Scenario                    | States                                           |
+| --------------------------- | ------------------------------------------------ |
+| File System                 | File System, Folder, File                        |
+| Arithmetic Expression       | Expression, Number, Operation                    |
+| Graphical User Interfaces   | UI elements like panels, buttons and text fields |
+
+✅ Benefits:
+| Benefit        | Explanation                                                                       |
+| -------------- | --------------------------------------------------------------------------------- |
+| Tree structure | Represents hierarchical structures clearly                                        |
+| Uniformity     | Clients treat single and composite objects uniformly                              |
+| Extensibility  | New components (Leaf or Composite) can be added easily                            |
+| Recursive      | It enables operations to be applied recursively across the entire tree structure. |
 
 ---
