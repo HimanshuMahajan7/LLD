@@ -254,3 +254,24 @@ class Document {
 | Recursive      | It enables operations to be applied recursively across the entire tree structure. |
 
 ---
+
+### Adapter Design Pattern
+    The Adapter Design Pattern is a structural pattern that allows incompatible interfaces to work together.
+    It acts as a bridge between two incompatible interfaces.
+
+💡 Intent:
+* Convert the interface of a class into another interface that clients expect.
+
+🧱 Key Components:
+| Component | Role                                                                  |
+| --------- | --------------------------------------------------------------------- |
+| `Client`  | The object that needs to use the functionality of another object.     |
+| `Adaptee` | Existing class with incompatible interface                            |
+| `Target`  | Expected interface (what client understands)                          |
+| `Adapter` | Converts Adaptee to Target                                            |
+
+📦 Real-Life Example:
+* Power Adapter & Socket
+* Memory Card, Card Reader, USB Socket
+* XML to JSON Parser
+* Weight Machine shownig reading only in pound, need an adapter
