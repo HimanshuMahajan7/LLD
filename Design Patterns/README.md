@@ -275,3 +275,41 @@ class Document {
 * Memory Card, Card Reader, USB Socket
 * XML to JSON Parser
 * Weight Machine shownig reading only in pound, need an adapter
+
+---
+
+### Builder Design Pattern
+    The Builder Pattern is a creational design pattern that lets you construct complex objects step-by-step.
+    It separates the construction process from the representation so that the same construction process can create different representations.
+
+💡 When to Use
+* When an object has many optional parameters.
+* When object creation is complex and should be isolated from its representation.
+* To avoid telescoping constructors (constructors with too many parameters).
+
+🔑 Key Components
+* **Product** → The complex object that is being built.
+* **Builder Interface** → Defines the steps required to build the Product.
+* **ConcreteBuilder** → Implements the Builder interface, providing specific implementations for building parts of the Product and returning the final Product instance.
+* **Director** (Optional) → Controls the order of construction steps.
+
+📦 Real-Life Example:
+* StringBuilder
+
+✅ Advantages of the Builder Pattern:
+* Improves readability and maintainability.
+* Encapsulation of Construction Logic.
+* Flexibility
+* Immutability
+* Centralized Validation
+
+✅ Advantages of the Builder Pattern:
+| Benefit                                       | Explanation                                                                                                                                                   |
+| ----------------------------------------------| ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Improves readability and maintainability.     | It makes the object creation process more readable, especially for objects with many parameters, by providing a fluent API (often using method chaining).     |
+| Encapsulation of Construction Logic.          | The complex construction logic is encapsulated within the builder, keeping the Product class clean and focused on its core responsibilities.                  |
+| Flexibility                                   | Allows for the creation of different representations of the same complex object using the same construction process.                                          |
+| Immutability                                  | Facilitates the creation of immutable objects by constructing them completely before they are returned to the client.                                         |
+| Centralized Validation                        | Validation rules related to the object's construction can be centralized within the builder.                                                                  |
+
+---
