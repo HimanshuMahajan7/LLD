@@ -313,3 +313,66 @@ class Document {
 | Centralized Validation                        | Validation rules related to the object's construction can be centralized within the builder.                                                                  |
 
 ---
+
+### Facade Design Pattern
+    The Facade Pattern is a structural design pattern that provides a simplified interface to a complex subsystem.
+    It hides the complexity of multiple classes and exposes a single entry point for the client to use.
+
+✅ When to Use
+* When we want to hide the system complexities from the client.
+* When you have a complex system with multiple classes and APIs, but you want to provide a simple interface to the client.
+* To decouple client code from the underlying implementation details.
+* To reduce dependencies between subsystems.
+
+📦 Example:
+```java
+// Subsystem 1
+class AudioPlayer {
+    void playAudio() { System.out.println("Playing audio..."); }
+}
+
+// Subsystem 2
+class VideoPlayer {
+    void playVideo() { System.out.println("Playing video..."); }
+}
+
+// Subsystem 3
+class SubtitleService {
+    void loadSubtitles() { System.out.println("Loading subtitles..."); }
+}
+
+// Facade
+class MediaFacade {
+    private AudioPlayer audioPlayer;
+    private VideoPlayer videoPlayer;
+    private SubtitleService subtitleService;
+
+    public MediaFacade() {
+        audioPlayer = new AudioPlayer();
+        videoPlayer = new VideoPlayer();
+        subtitleService = new SubtitleService();
+    }
+
+    public void playMovie() {
+        audioPlayer.playAudio();
+        videoPlayer.playVideo();
+        subtitleService.loadSubtitles();
+        System.out.println("Movie started successfully!");
+    }
+}
+
+// Client
+public class FacadePatternExample {
+    public static void main(String[] args) {
+        MediaFacade mediaFacade = new MediaFacade();
+        mediaFacade.playMovie();
+    }
+}
+```
+
+🔑 Key Points
+* Hides complexity — Client doesn’t need to interact with multiple subsystem classes directly.
+* Promotes loose coupling — Client only depends on the facade, not the subsystems.
+* Improves readability — A single method can perform multiple complex actions internally.
+
+---
