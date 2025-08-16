@@ -9,12 +9,41 @@
 * Behavioral Design Pattern
 
 ## Creational Design Pattern
-* Singleton Pattern
-* Prototype Pattern
-* Builder Pattern
-* Factory Pattern
-* Abstract Pattern
-* Object Pool Pattern
+    →   Creational Design Patterns are responsible to create objects / controls the creation of object.
+    →   Creational Design Patterns are a category of design patterns focused on object creation.
+        They provide ways to create objects in a manner that is flexible, reusable, and hides the complexities of object instantiation.
+        These patterns address the problem of creating objects in a way that decouples the client code from the specific object types and their creation logic.
+    →   Creational patterns deal with object creation mechanisms, trying to make the system independent of how objects are created, composed, and represented.
+    →   They provide more flexibility & reuse compared to direct object instantiation using new.
+
+#### 🔹 Types of Creational Design Patterns
+1. Singleton Pattern
+2. Prototype Pattern
+3. Builder Pattern
+4. Factory Pattern
+5. Abstract Pattern
+6. Object Pool Pattern
+
+#### 👷 Builder
+* Separates construction of a complex object from its representation.
+* Example: StringBuilder, building House step by step.
+
+#### 🏭 Factory Method
+* Defines an interface for creating objects, but lets subclasses decide which class to instantiate.
+* Example: Calendar.getInstance().
+
+#### 🏢 Abstract Factory
+* Provides an interface to create families of related objects without specifying concrete classes.
+* Example: GUIFactory → creates Button & Checkbox for different OS.
+
+#### 👤 Singleton
+* Ensures only one instance of a class exists and provides a global access point.
+* Example: Runtime.getRuntime().
+
+#### 📦 Prototype
+* Creates new objects by cloning an existing object.
+* Example: Object.clone().
+
 
 ## Structural Design Pattern
 1. Adapter Pattern
