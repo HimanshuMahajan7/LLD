@@ -77,10 +77,25 @@
 * Creates new objects by cloning an existing object.
 * Example: Object.clone().
 
+### 🏗️ Creational Design Patterns — Comparison
+| Pattern                 | Purpose                                                                    | When to Use                                                                    | Example in Java                            | ✅ Pros                                     | ⚠️ Cons                                     |
+| ------------------------| -------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------ | ------------------------------------------ | --------------------------------------------  |
+| **👷 Builder**          | Separate object construction from representation                           | When an object has **many optional params** or needs **step-by-step creation** | `StringBuilder`, `Lombok @Builder`         | Clear, readable code; immutable objects    | More complex code                            |
+| **🏭 Factory Method**   | Define interface for creating objects, subclasses decide implementation    | When a class can't anticipate the type of objects it needs                     | `Calendar.getInstance()`                   | Loose coupling, easy extension             | Class explosion if too many types            |
+| **🏢 Abstract Factory** | Create **families of related objects** without specifying concrete classes | When products must be used together & are platform dependent                   | `javax.xml.parsers.DocumentBuilderFactory` | Ensures compatibility across products      | Hard to add new product families             |
+| **👤 Singleton**        | Ensure **only one instance** exists, provide global access                 | When you need a single point of control (e.g., config, cache)                  | `Runtime.getRuntime()`                     | Controlled access, saves memory            | Harder to unit test, risk of misuse          |
+| **📦 Prototype**        | Clone objects instead of creating new ones                                 | When object creation is costly or complex                                      | `Object.clone()`                           | Efficient cloning, dynamic object creation | Cloning may be tricky (deep vs shallow copy) |
+
+✅ Quick Recall:
+* **Builder** → step-by-step, complex objects.
+* **Factory** Method → one product, subclass decides.
+* **Abstract** Factory → family of products.
+* **Singleton** → only one instance.
+* **Prototype** → clone existing objects.
+
 
 ## 📖 Detailed Explanation
 
----
 ### Proxy Pattern
     The Proxy Pattern is a structural design pattern that provides a placeholder or surrogate for another object to control access to it.
 
