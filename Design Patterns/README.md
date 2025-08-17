@@ -590,3 +590,159 @@ public class PrototypeDemo {
     }
 }
 ```
+
+---
+
+### Singleton Design Pattern
+**`Singleton`** is a creational design pattern that ensures:
+1. Only one instance of a class exists in the application.
+2. Provides a global access point to that instance.
+
+#### 🔹 Key Concept:
+* Private constructor (prevents direct instantiation).
+* Static instance reference.
+* Public static method to return the instance.
+
+#### ✅ Advantages:
+* Controlled access to a single instance.
+* Saves memory (only one object created).
+* Useful for logging, caching, configuration.
+
+#### ⚠️ Disadvantages:
+* Harder to unit test (due to global state).
+* Can become a God object (too many responsibilities).
+* Risk of multithreading issues if not implemented properly.
+
+#### 🏆 Real-World Examples in Java:
+* Runtime.getRuntime()
+* Logger frameworks (Log4j, SLF4J)
+* Spring Beans (default scope = Singleton)
+
+#### Ways to achieve:
+1. Eager Initialization
+2. Lazy Initialization
+3. Synchronozed Method
+4. Double-Checked Locking
+5. Bill Pugh Singleton (Inner Class) (Best Practice)
+6. Enum Singleton
+
+#### 👉 Interview Tip:
+* “Which Singleton implementation is best?”
+    * ➡️ Answer: Bill Pugh Singleton (uses inner static helper class, thread-safe, lazy-loaded, efficient).
+* Best Practical Choice → Bill Pugh Singleton (simple, lazy, thread-safe).
+* Most Robust → Enum Singleton (safe from serialization + reflection).
+* Worst for Real Projects → Lazy without synchronization (race conditions).
+
+#### 📝 Singleton Implementation Comparison
+| Approach                    | Implementation                                               | Thread-Safety           | Lazy Loading | Pros ✅                                       | Cons ⚠️                                                     |
+| --------------------------- | ------------------------------------------------------------ | ----------------------- | ------------ | -------------------------------------------- | ----------------------------------------------------------- |
+| **Eager Initialization**    | `private static final Singleton instance = new Singleton();` | ✅ Yes                   | ❌ No         | Simple, thread-safe without sync overhead    | Instance created even if not used (wastes memory/resources) |
+| **Lazy Initialization**     | Instance created on first call                               | ❌ No                    | ✅ Yes        | Saves memory until needed                    | Not thread-safe, multiple instances in multithreaded env    |
+| **Synchronized Method**     | `synchronized getInstance()`                                 | ✅ Yes                   | ✅ Yes        | Simple fix for thread-safety                 | Performance overhead (every call is synchronized)           |
+| **Double-Checked Locking**  | `if (instance == null) { synchronized ... }`                 | ✅ Yes (with `volatile`) | ✅ Yes        | Efficient, synchronization only once         | Slightly complex, `volatile` required                       |
+| **Bill Pugh (Inner Class)** | Static inner helper class                                    | ✅ Yes                   | ✅ Yes        | Best practice, efficient, simple             | None significant                                            |
+| **Enum Singleton**          | `enum Singleton { INSTANCE; }`                               | ✅ Yes                   | ✅ Yes        | Easiest, serialization-safe, reflection-safe | Can’t extend class (enums can’t inherit other classes)      |
+
+#### 📌 Example in Java
+1. Eager Initialization
+    ```java
+        class EagerSingleton {
+            private static final EagerSingleton instance = new EagerSingleton();
+
+            private EagerSingleton() {}  // private constructor
+
+            public static EagerSingleton getInstance() {
+                return instance;
+            }
+        }
+    ```
+
+2. Lazy Initialization (Thread-Unsafe)
+    ```java
+        class LazySingleton {
+            private static LazySingleton instance;
+
+            private LazySingleton() {}
+
+            public static LazySingleton getInstance() {
+                if (instance == null) {
+                    instance = new LazySingleton(); // not thread-safe
+                }
+                return instance;
+            }
+        }
+    ```
+
+3. Synchronized Method
+    ```java
+        class SynchronizedMethodSingleton {
+            private static volatile SynchronizedMethodSingleton instance;
+
+            private SynchronizedMethodSingleton() {}
+
+            public static SynchronizedMethodSingleton getInstance() {
+                if (instance == null) {
+                    synchronized (SynchronizedMethodSingleton.class) {
+                        if (instance == null) {
+                            instance = new SynchronizedMethodSingleton();
+                        }
+                    }
+                }
+                return instance;
+            }
+        }
+    ```
+
+4. Double-Checked Locking (Thread-Safe)
+    ```java
+        class DoubleCheckedLocking {
+            private static volatile DoubleCheckedLocking instance;
+
+            private DoubleCheckedLocking() {}
+
+            public static DoubleCheckedLocking getInstance() {
+                if (instance == null) {
+                    synchronized (DoubleCheckedLocking.class) {
+                        if (instance == null) {
+                            instance = new DoubleCheckedLocking();
+                        }
+                    }
+                }
+                return instance;
+            }
+        }
+    ```
+
+5. Bill Pugh Singleton (Best Practice)
+    ```java
+        class BillPughSingleton {
+            private BillPughSingleton() {}
+
+            private static class Helper {
+                private static final BillPughSingleton INSTANCE = new BillPughSingleton();
+            }
+
+            public static BillPughSingleton getInstance() {
+                return Helper.INSTANCE;
+            }
+        }
+    ```
+
+6. Enum Singleton
+    ```java
+        public enum EnumSingleton {
+            INSTANCE;  // single instance
+
+            public void showMessage() {
+                System.out.println("Hello from Enum Singleton!");
+            }
+        }
+
+        // Usage
+        public class Main {
+            public static void main(String[] args) {
+                EnumSingleton singleton = EnumSingleton.INSTANCE;
+                singleton.showMessage();
+            }
+        }
+    ```
