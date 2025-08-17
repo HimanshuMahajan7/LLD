@@ -1,7 +1,7 @@
 package singleton;
 
 public class DoubleCheckedLockingSingleton {
-    private static volatile DoubleCheckedLockingSingleton instance;
+    private static DoubleCheckedLockingSingleton instance;
 
     private DoubleCheckedLockingSingleton() {}
 

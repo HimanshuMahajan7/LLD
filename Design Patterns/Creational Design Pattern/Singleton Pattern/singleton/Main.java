@@ -6,6 +6,7 @@ public class Main {
         LazySingleton lazySingleton = LazySingleton.getInstance();
         SynchronizedMethodSingleton synchronizedMethodSingleton = SynchronizedMethodSingleton.getInstance();
         DoubleCheckedLockingSingleton doubleCheckedLockingSingleton = DoubleCheckedLockingSingleton.getInstance();
+        DoubleCheckedLockingWithVolatileSingleton doubleCheckedLockingWithVolatileSingleton = DoubleCheckedLockingWithVolatileSingleton.getInstance();
         BillPughSingleton billPughSingleton = BillPughSingleton.getInstance();
         EnumSingleton enumSingleton = EnumSingleton.INSTANCE;
 
@@ -13,6 +14,7 @@ public class Main {
         lazySingleton.showMessage();
         synchronizedMethodSingleton.showMessage();
         doubleCheckedLockingSingleton.showMessage();
+        doubleCheckedLockingWithVolatileSingleton.showMessage();
         billPughSingleton.showMessage();
         enumSingleton.showMessage();
     }

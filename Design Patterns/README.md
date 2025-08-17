@@ -623,8 +623,16 @@ public class PrototypeDemo {
 2. Lazy Initialization
 3. Synchronozed Method
 4. Double-Checked Locking
-5. Bill Pugh Singleton (Inner Class) (Best Practice)
-6. Enum Singleton
+5. Double-Checked Locking with `volatile`
+7. Bill Pugh Singleton (Inner Class) (Best Practice)
+8. Enum Singleton
+
+#### ⚠️ Issues with Double-Checked Locking:
+* Partial Thread safe or no thread safe because of
+    1. Instruction Reordering
+    2. L1 Caching
+* Fix:
+    1. Use of `volatile` keyword
 
 #### 👉 Interview Tip:
 * “Which Singleton implementation is best?”
@@ -634,8 +642,8 @@ public class PrototypeDemo {
 * Worst for Real Projects → Lazy without synchronization (race conditions).
 
 #### 📝 Singleton Implementation Comparison
-| Approach                    | Implementation                                               | Thread-Safety           | Lazy Loading | Pros ✅                                       | Cons ⚠️                                                     |
-| --------------------------- | ------------------------------------------------------------ | ----------------------- | ------------ | -------------------------------------------- | ----------------------------------------------------------- |
+| Approach                    | Implementation                                               | Thread-Safety            | Lazy Loading   | Pros ✅                                     | Cons ⚠️                                                     |
+| --------------------------- | ------------------------------------------------------------ | -----------------------  | ------------   | -------------------------------------------- | ----------------------------------------------------------- |
 | **Eager Initialization**    | `private static final Singleton instance = new Singleton();` | ✅ Yes                   | ❌ No         | Simple, thread-safe without sync overhead    | Instance created even if not used (wastes memory/resources) |
 | **Lazy Initialization**     | Instance created on first call                               | ❌ No                    | ✅ Yes        | Saves memory until needed                    | Not thread-safe, multiple instances in multithreaded env    |
 | **Synchronized Method**     | `synchronized getInstance()`                                 | ✅ Yes                   | ✅ Yes        | Simple fix for thread-safety                 | Performance overhead (every call is synchronized)           |
@@ -693,10 +701,10 @@ public class PrototypeDemo {
         }
     ```
 
-4. Double-Checked Locking (Thread-Safe)
+4. Double-Checked Locking (PArtial Thread-Safe)
     ```java
         class DoubleCheckedLocking {
-            private static volatile DoubleCheckedLocking instance;
+            private static DoubleCheckedLocking instance;
 
             private DoubleCheckedLocking() {}
 
@@ -713,7 +721,27 @@ public class PrototypeDemo {
         }
     ```
 
-5. Bill Pugh Singleton (Best Practice)
+5. Double-Checked Locking (Thread-Safe)
+    ```java
+        class DoubleCheckedLockingWithVolatile {
+            private static volatile DoubleCheckedLockingWithVolatile instance;
+
+            private DoubleCheckedLockingWithVolatile() {}
+
+            public static DoubleCheckedLockingWithVolatile getInstance() {
+                if (instance == null) {
+                    synchronized (DoubleCheckedLockingWithVolatile.class) {
+                        if (instance == null) {
+                            instance = new DoubleCheckedLockingWithVolatile();
+                        }
+                    }
+                }
+                return instance;
+            }
+        }
+    ```
+
+6. Bill Pugh Singleton (Best Practice)
     ```java
         class BillPughSingleton {
             private BillPughSingleton() {}
@@ -728,7 +756,7 @@ public class PrototypeDemo {
         }
     ```
 
-6. Enum Singleton
+7. Enum Singleton
     ```java
         public enum EnumSingleton {
             INSTANCE;  // single instance
