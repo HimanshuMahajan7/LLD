@@ -640,6 +640,11 @@ public class PrototypeDemo {
 * Best Practical Choice → Bill Pugh Singleton (simple, lazy, thread-safe).
 * Most Robust → Enum Singleton (safe from serialization + reflection).
 * Worst for Real Projects → Lazy without synchronization (race conditions).
+* Can we create Singleton Pattern with `synchronised` keyword?
+    * Yes, we can. Using following ways -
+        * Eager Initialization
+        * Bill Pugh Singleton (Static Inner Class)
+        * Enum Singleton
 
 #### 📝 Singleton Implementation Comparison
 | Approach                    | Implementation                                               | Thread-Safety            | Lazy Loading   | Pros ✅                                     | Cons ⚠️                                                     |
