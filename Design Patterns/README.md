@@ -529,3 +529,64 @@ class BridgePattern {
 ✅ Advantages
 * Abstraction & implementation can evolve separately.
 * Reduces code duplication.
+
+---
+
+### Prototype Design Pattern
+    It is used when we have to make Copy/Clone from existing Object.
+    Prototype is a creational design pattern that allows you to create new objects by cloning an existing object (prototype) instead of instantiating from scratch.
+
+* The Prototype Design Pattern is a creational design pattern that facilitates the creation of new objects by copying an existing object, known as the prototype.
+* Instead of instantiating new objects from scratch, this pattern allows for the efficient creation of duplicates, particularly when object creation is a complex, time-consuming, or resource-intensive process. 
+
+#### 🔹 Key Points:
+* Helps when object creation is costly/complex.
+* Supports deep copy (clone full object graph) and shallow copy (copy only references).
+* Uses clone() method in Java (Cloneable interface).
+
+#### ✅ Advantages:
+* Faster object creation.
+* Reduces subclassing (no need for multiple factory classes).
+* Flexible — can clone complex objects easily.
+
+#### ⚠️ Disadvantages:
+* Cloning can be tricky (deep vs shallow).
+* Requires handling mutable references carefully.
+
+#### 👉 Interview Tip:
+* If asked — “When would you use Prototype?” → Answer:
+    * ✔️ When creating objects is resource-intensive (e.g., DB connection configs, large object graphs).
+    * ✔️ When you need many similar objects with slight modifications.
+
+#### 📌 Example in Java:
+```java
+// Prototype Interface
+interface Prototype extends Cloneable {
+    Prototype clone();
+}
+
+// Concrete Prototype
+class Document implements Prototype {
+    private String content;
+
+    Document(String content) { this.content = content; }
+
+    @Override
+    public Prototype clone() {
+        return new Document(this.content); // shallow copy
+    }
+
+    public String getContent() { return content; }
+}
+
+// Usage
+public class PrototypeDemo {
+    public static void main(String[] args) {
+        Document doc1 = new Document("Original Content");
+        Document doc2 = (Document) doc1.clone();
+
+        System.out.println(doc1.getContent()); // Original Content
+        System.out.println(doc2.getContent()); // Original Content
+    }
+}
+```
