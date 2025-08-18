@@ -779,3 +779,89 @@ public class PrototypeDemo {
             }
         }
     ```
+
+---
+
+### Fly Weight Design Pattern
+    The Flyweight Pattern is a structural design pattern that reduces memory usage by sharing objects instead of creating new ones for every request.
+    It achieves this by separating the object's intrinsic state (shared and immutable) from its extrinsic state (unique and context-dependent). 
+
+It is useful when:
+* You have a huge number of similar objects.
+* Many objects can share common (intrinsic) state, while the unique (extrinsic) state is supplied from outside.
+
+#### 🏗️ Structure
+* **`Intrinsic State`** → Data that is inherent to the object and can be shared between multiple instances. This data is typically immutable and doesn't change based on context. 
+* **`Extrinsic State`** → Data that is specific to each object's context and cannot be shared. This data is often passed into the flyweight object when needed. 
+* **`Flyweight`** → Interface for shared objects. The object that shares its intrinsic state. 
+* **`ConcreteFlyweight`** → Implements Flyweight, stores intrinsic state.
+* **`FlyweightFactory`** → Manages Flyweights, ensures sharing.
+* **`Client`** → Uses Flyweights and supplies extrinsic state.
+
+#### ✅ Advantages
+* Reduced Memory Consumption:
+    * By sharing intrinsic state, the pattern minimizes memory usage, especially when dealing with a large number of similar objects.
+* Improved Performance:
+    * Reduces the overhead of creating and managing numerous objects, leading to faster application performance. 
+* Promotes object reuse.
+* Faster creation (objects cached instead of new instantiation).
+
+#### ⚠️ Disadvantages
+* Code becomes complex (managing intrinsic vs extrinsic state).
+* Works best only when there are lots of similar objects.
+
+#### 🏆 Real-World Examples
+* Java String Pool ("abc" literals are flyweights).
+* Integer.valueOf(int) (caching small integers -128 to 127).
+* GUI applications (reusing button/character shapes).
+* Game development (e.g., trees in a forest, bullets in a shooter game).
+
+#### 👉 Quick Interview Tip:
+* “Is Flyweight used in Java?”
+    * → Answer: Yes, String pool and Integer cache are real-world Flyweight implementations.
+
+#### 📌 Example:
+```java
+// Flyweight
+interface Shape {
+    void draw(int x, int y);
+}
+
+// ConcreteFlyweight
+class Circle implements Shape {
+    private final String color;  // intrinsic (shared), must be private
+
+    public Circle(String color) {
+        this.color = color;
+    }
+
+    @Override
+    public void draw(int x, int y) {
+        System.out.println("Drawing " + color + " circle at (" + x + "," + y + ")");
+    }
+}
+
+// FlyweightFactory
+class ShapeFactory {
+    private static final Map<String, Shape> circleMap = new HashMap<>();
+
+    public static Shape getCircle(String color) {
+        return circleMap.computeIfAbsent(color, c -> new Circle(c));
+    }
+}
+
+// Client
+public class FlyweightDemo {
+    public static void main(String[] args) {
+        Shape red1 = ShapeFactory.getCircle("Red");
+        red1.draw(10, 20);
+
+        Shape red2 = ShapeFactory.getCircle("Red");
+        red2.draw(30, 40);
+
+        System.out.println("Same object? " + (red1 == red2));  // true
+    }
+}
+```
+
+---
