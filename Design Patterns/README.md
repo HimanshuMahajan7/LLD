@@ -865,3 +865,88 @@ public class FlyweightDemo {
 ```
 
 ---
+
+### Command Design Pattern
+    The Command Pattern is a behavioral design pattern that turns a request into a standalone object (command).
+    This decouples the sender (Invoker) of the request from the receiver (Executor).
+    👉 In short: Encapsulates a request as an object.
+
+#### 🏗️ Structure:
+* Command → Interface declaring execute().
+* ConcreteCommand → Implements Command, calls methods on Receiver.
+* Receiver → The actual object that performs the action.
+* Invoker → Calls execute() on the command object.
+* Client → Creates commands and associates them with receivers.
+
+#### ✅ Advantages:
+* Decouples sender and receiver.
+* Supports undo/redo operations (by keeping history of commands).
+* Easy to add new commands without modifying existing code.
+
+#### ⚠️ Disadvantages:
+* Can lead to creation of many small classes.
+* Increases complexity if overused.
+
+#### 🏆 Real-World Examples:
+* GUI buttons & menu actions (ActionListener in Swing).
+* Job queues (commands scheduled and executed later).
+* Macro recording (a sequence of commands stored and replayed).
+* Spring Batch uses similar command encapsulation.
+
+#### 👉 Interview Tip:
+* “How is it different from Strategy?”
+    * Strategy: Encapsulates an algorithm.
+    * Command: Encapsulates a request/action.
+
+#### 📌 Example: Remote Control
+```java
+// Command Interface
+interface Command {
+    void execute();
+}
+
+// Receiver
+class Light {
+    public void turnOn() { System.out.println("Light is ON"); }
+    public void turnOff() { System.out.println("Light is OFF"); }
+}
+
+// Concrete Commands
+class TurnOnLightCommand implements Command {
+    private Light light;
+    public TurnOnLightCommand(Light light) { this.light = light; }
+    public void execute() { light.turnOn(); }
+}
+
+class TurnOffLightCommand implements Command {
+    private Light light;
+    public TurnOffLightCommand(Light light) { this.light = light; }
+    public void execute() { light.turnOff(); }
+}
+
+// Invoker
+class RemoteControl {
+    private Command command;
+    public void setCommand(Command command) { this.command = command; }
+    public void pressButton() { command.execute(); }
+}
+
+// Client
+public class CommandPatternDemo {
+    public static void main(String[] args) {
+        Light light = new Light();
+        Command on = new TurnOnLightCommand(light);
+        Command off = new TurnOffLightCommand(light);
+
+        RemoteControl remote = new RemoteControl();
+
+        remote.setCommand(on);
+        remote.pressButton();   // Light is ON
+
+        remote.setCommand(off);
+        remote.pressButton();   // Light is OFF
+    }
+}
+```
+
+---
