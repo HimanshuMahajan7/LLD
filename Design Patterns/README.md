@@ -950,3 +950,8 @@ public class CommandPatternDemo {
 ```
 
 ---
+
+### Decorator Design Pattern
+
+#### Issue:
+* Class Explosion
