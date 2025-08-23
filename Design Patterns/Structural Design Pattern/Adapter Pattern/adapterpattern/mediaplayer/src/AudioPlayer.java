@@ -1,7 +1,7 @@
 package adapterpattern.mediaplayer.src;
 
 /*
-* Client class using the adapter
+* Main class using the adapter
 */
 public class AudioPlayer implements MediaPlayer {
 

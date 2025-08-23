@@ -416,7 +416,7 @@ class MediaFacade {
     }
 }
 
-// Client
+// Main
 public class FacadePatternExample {
     public static void main(String[] args) {
         MediaFacade mediaFacade = new MediaFacade();
@@ -850,7 +850,7 @@ class ShapeFactory {
     }
 }
 
-// Client
+// Main
 public class FlyweightDemo {
     public static void main(String[] args) {
         Shape red1 = ShapeFactory.getCircle("Red");
@@ -931,7 +931,7 @@ class RemoteControl {
     public void pressButton() { command.execute(); }
 }
 
-// Client
+// Main
 public class CommandPatternDemo {
     public static void main(String[] args) {
         Light light = new Light();
@@ -1018,7 +1018,7 @@ class SugarDecorator extends CoffeeDecorator {
     public double getCost() { return coffee.getCost() + 0.5; }
 }
 
-// Client
+// Main
 public class DecoratorPatternDemo {
     public static void main(String[] args) {
         Coffee coffee = new SimpleCoffee();
@@ -1029,6 +1029,94 @@ public class DecoratorPatternDemo {
 
         coffee = new SugarDecorator(coffee);
         System.out.println(coffee.getDescription() + " $" + coffee.getCost());
+    }
+}
+```
+
+---
+
+### Iterator Design Pattern
+    The Iterator Pattern is a behavioral design pattern that provides a way to sequentially access elements of a collection (aggregate object) without exposing its underlying representation (like arrays, lists, trees, etc.).
+    👉 In short: It decouples traversal logic from the collection itself.
+
+#### 🏗️ Structure
+* Iterator (interface) → defines methods like hasNext() and next().
+* ConcreteIterator → implements the traversal logic.
+* Aggregate (interface) → defines createIterator().
+* ConcreteAggregate → collection that provides an iterator.
+* Client → uses iterator to traverse elements.
+
+#### ✅ Advantages
+* Provides a uniform way to iterate over different collections.
+* Hides internal representation (array, list, tree, etc.).
+* Supports multiple simultaneous traversals on the same collection.
+
+#### ⚠️ Disadvantages
+* Adds extra classes (Iterator + Aggregate).
+* Sometimes iteration logic is so simple (like for-each) that pattern feels like overkill.
+
+#### 🏆 Real-World Examples
+* Java’s built-in Iterator: Iterator<T> with hasNext(), next(), and remove().
+* Enhanced for-each loop → uses Iterable under the hood.
+* ResultSet in JDBC.
+* Spliterator in Java 8 for parallel iteration.
+
+#### 👉 Interview Tip:
+* If asked: “How is Iterator different from Enumeration in Java?”
+    * Enumeration (legacy) → methods: hasMoreElements(), nextElement(). Only read.
+    * Iterator (modern) → methods: hasNext(), next(), remove(). Read + Remove.
+
+#### 📌 Example
+Custom Book Collection example 📚:
+```java
+// Iterator interface
+interface Iterator<T> {
+    boolean hasNext();
+    T next();
+}
+
+// Aggregate interface
+interface BookCollection {
+    Iterator<String> createIterator();
+}
+
+// ConcreteAggregate
+class Library implements BookCollection {
+    private String[] books = {"Design Patterns", "Java in Action", "Effective Java"};
+
+    @Override
+    public Iterator<String> createIterator() {
+        return new BookIterator(books);
+    }
+}
+
+// ConcreteIterator
+class BookIterator implements Iterator<String> {
+    private String[] books;
+    private int index = 0;
+
+    public BookIterator(String[] books) {
+        this.books = books;
+    }
+
+    public boolean hasNext() {
+        return index < books.length;
+    }
+
+    public String next() {
+        return hasNext() ? books[index++] : null;
+    }
+}
+
+// Main
+public class IteratorPatternDemo {
+    public static void main(String[] args) {
+        Library library = new Library();
+        Iterator<String> iterator = library.createIterator();
+
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
     }
 }
 ```
