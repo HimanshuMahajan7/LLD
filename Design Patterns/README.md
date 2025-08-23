@@ -952,6 +952,83 @@ public class CommandPatternDemo {
 ---
 
 ### Decorator Design Pattern
+    The Decorator Pattern is a structural design pattern that lets you add new behaviors to objects dynamically without altering their class.
 
-#### Issue:
+    👉 In short: Wrap objects to extend their functionality.
+
+#### Issue it resolves:
 * Class Explosion
+
+#### 🏗️ Structure
+* Component (Interface/Abstract class) → defines the base behavior.
+* ConcreteComponent → the actual object.
+* Decorator (Abstract) → wraps a component, implements the same interface.
+* ConcreteDecorator → adds extra behavior before/after delegating to wrapped object.
+
+#### ✅ Advantages
+* Flexible → add/remove responsibilities at runtime.
+* Promotes composition over inheritance.
+* Open/Closed Principle → extend functionality without modifying existing code.
+
+#### ⚠️ Disadvantages
+* Can lead to many small classes.
+* Debugging becomes harder because of multiple wrappers.
+
+#### 🏆 Real-World Examples
+* java.io package → BufferedReader, DataInputStream, LineNumberReader all decorate InputStream/Reader.
+* Spring’s BeanPostProcessor and AOP Proxies.
+* UI frameworks → decorators for styling components.
+
+#### 👉 Interview Tip:
+* If asked “Difference between Decorator and Proxy?”
+    * Decorator: Adds new behavior/features.
+    * Proxy: Controls access (e.g., security, lazy loading).
+
+#### 📌 Example
+Coffee ☕ Example (classic for interviews):
+```java
+// Component
+interface Coffee {
+    String getDescription();
+    double getCost();
+}
+
+// ConcreteComponent
+class SimpleCoffee implements Coffee {
+    public String getDescription() { return "Simple Coffee"; }
+    public double getCost() { return 5.0; }
+}
+
+// Decorator
+abstract class CoffeeDecorator implements Coffee {
+    protected Coffee coffee;
+    public CoffeeDecorator(Coffee coffee) { this.coffee = coffee; }
+}
+
+// ConcreteDecorators
+class MilkDecorator extends CoffeeDecorator {
+    public MilkDecorator(Coffee coffee) { super(coffee); }
+    public String getDescription() { return coffee.getDescription() + ", Milk"; }
+    public double getCost() { return coffee.getCost() + 1.5; }
+}
+
+class SugarDecorator extends CoffeeDecorator {
+    public SugarDecorator(Coffee coffee) { super(coffee); }
+    public String getDescription() { return coffee.getDescription() + ", Sugar"; }
+    public double getCost() { return coffee.getCost() + 0.5; }
+}
+
+// Client
+public class DecoratorPatternDemo {
+    public static void main(String[] args) {
+        Coffee coffee = new SimpleCoffee();
+        System.out.println(coffee.getDescription() + " $" + coffee.getCost());
+
+        coffee = new MilkDecorator(coffee);
+        System.out.println(coffee.getDescription() + " $" + coffee.getCost());
+
+        coffee = new SugarDecorator(coffee);
+        System.out.println(coffee.getDescription() + " $" + coffee.getCost());
+    }
+}
+```
