@@ -1120,3 +1120,132 @@ public class IteratorPatternDemo {
     }
 }
 ```
+
+---
+
+### Mediator Design Pattern
+    The Mediator Pattern is a behavioral design pattern.
+    It encourage loose coulping by keeping objects from referring to each other explicitly and allows them to communicate through a mediator object.
+
+* The Mediator Pattern is a behavioral design pattern that defines an object (mediator) to encapsulate how a set of objects interact.
+    * It promotes loose coupling by preventing direct communication between objects.
+    * Instead, objects communicate through the mediator, which handles coordination.
+* 👉 In simple words: Instead of all objects talking to each other directly (chaos 🌀), they talk only to a Mediator, which organizes the communication.
+
+#### 🏗️ Structure
+* Mediator (interface) → defines methods for communication.
+* ConcreteMediator → central class that coordinates communication.
+* Colleagues (components) → objects that interact, but only via the mediator.
+* Client → configures mediator and components.
+
+#### ✅ Advantages
+* Reduces tight coupling between components.
+* Centralizes control of interactions.
+* Makes communication logic easier to maintain.
+
+#### ⚠️ Disadvantages
+* Mediator can become a God object (too much logic in one place).
+* If too many colleagues → mediator logic gets complex & bloated.
+
+#### 🏆 Real-World Examples
+* Auction System (AuctionMediator, Bidder)
+* Chat applications (like WhatsApp, Slack, etc.).
+* Air traffic control system 🛫 (planes communicate via control tower, not directly).
+* GUI frameworks (dialog boxes, buttons, text fields coordinated via a mediator).
+* Spring Framework’s DispatcherServlet (acts as a mediator between requests & controllers).
+
+#### 👉 Interview Tip:
+* If asked Mediator vs Observer:
+    * Their intent is different
+    * Mediator → central authority controls communication.
+    * Observer → objects communicate by broadcasting notifications, no central authority, change to state is communicated.
+
+#### 📌 Example
+Let’s model a Chat Room 💬 using the Mediator pattern.
+
+```java
+// Mediator
+interface ChatMediator {
+    void sendMessage(String msg, User user);
+    void addUser(User user);
+}
+
+// ConcreteMediator
+class ChatRoom implements ChatMediator {
+    private List<User> users = new ArrayList<>();
+
+    @Override
+    public void addUser(User user) {
+        users.add(user);
+    }
+
+    @Override
+    public void sendMessage(String msg, User sender) {
+        for (User u : users) {
+            // Don't send message to the sender
+            if (u != sender) {
+                u.receive(msg);
+            }
+        }
+    }
+}
+
+// Colleague
+abstract class User {
+    protected ChatMediator mediator;
+    protected String name;
+
+    public User(ChatMediator mediator, String name) {
+        this.mediator = mediator;
+        this.name = name;
+    }
+
+    abstract void send(String msg);
+    abstract void receive(String msg);
+}
+
+// ConcreteColleague
+class ConcreteUser extends User {
+    public ConcreteUser(ChatMediator mediator, String name) {
+        super(mediator, name);
+    }
+
+    @Override
+    public void send(String msg) {
+        System.out.println(this.name + " sends: " + msg);
+        mediator.sendMessage(msg, this);
+    }
+
+    @Override
+    public void receive(String msg) {
+        System.out.println(this.name + " received: " + msg);
+    }
+}
+
+// Client
+public class MediatorPatternDemo {
+    public static void main(String[] args) {
+        ChatMediator chatRoom = new ChatRoom();
+
+        User u1 = new ConcreteUser(chatRoom, "Alice");
+        User u2 = new ConcreteUser(chatRoom, "Bob");
+        User u3 = new ConcreteUser(chatRoom, "Charlie");
+
+        chatRoom.addUser(u1);
+        chatRoom.addUser(u2);
+        chatRoom.addUser(u3);
+
+        u1.send("Hi everyone!");
+        u2.send("Hello Alice!");
+    }
+}
+
+/*
+    Alice sends: Hi everyone!
+    Bob received: Hi everyone!
+    Charlie received: Hi everyone!
+    Bob sends: Hello Alice!
+    Alice received: Hello Alice!
+    Charlie received: Hello Alice!
+*/
+```
