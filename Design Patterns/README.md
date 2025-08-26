@@ -1249,3 +1249,128 @@ public class MediatorPatternDemo {
     Charlie received: Hello Alice!
 */
 ```
+
+---
+
+### Visitor Design Pattern
+
+The Visitor Pattern is a behavioral design pattern that lets you add new operations to a set of objects without modifying their classes.
+* It achieve this by separating the operation/algorithm from the objects on which it operates.
+* The new operation is put inside a Visitor object, and the target objects just “accept” the visitor.
+
+👉 In simple terms: Instead of changing your objects every time you want a new operation, you create a visitor that performs that operation.
+
+#### 🏗️ Structure
+* **Visitor** (interface) → Declares visit methods for each type of element.
+* **ConcreteVisitor** → Implements the operations.
+* **Element** (interface) → Defines accept(Visitor v) method.
+* **ConcreteElement** → Implements accept by calling visitor’s visit(this).
+* **Client** → Traverses objects and applies visitors.
+
+#### ✅ Advantages
+* Add new operations without modifying existing classes.
+* Promotes Open/Closed Principle.
+* Separates algorithms from object structure.
+
+#### ⚠️ Disadvantages
+* Adding a new element type requires changing Visitor interface + all visitors.
+* Increases complexity with many visitor methods.
+
+#### 🏆 Real-World Examples
+* Compilers/Interpreters: Parsing AST nodes (Abstract Syntax Tree).
+* Object serialization/deserialization.
+* Code analysis tools (static analysis, linting).
+* Document processing (e.g., visiting different document elements: text, image, table).
+
+#### 👉 Interview Tip:
+* Use Visitor when the set of element classes is stable but operations keep changing.
+* Use Strategy/Command when operations vary but element structure is stable.
+
+#### 📌 Code Example
+Document Editor 📝
+
+```java
+// Visitor
+interface DocumentVisitor {
+    void visit(Text text);
+    void visit(Image image);
+    void visit(Table table);
+}
+
+// Concrete Visitor 1: Rendering
+class RenderVisitor implements DocumentVisitor {
+    public void visit(Text text) {
+        System.out.println("Rendering Text: " + text.getContent());
+    }
+    public void visit(Image image) {
+        System.out.println("Rendering Image: " + image.getFileName());
+    }
+    public void visit(Table table) {
+        System.out.println("Rendering Table with " + table.getRows() + " rows");
+    }
+}
+
+// Concrete Visitor 2: Exporting
+class ExportVisitor implements DocumentVisitor {
+    public void visit(Text text) {
+        System.out.println("Exporting Text to HTML: <p>" + text.getContent() + "</p>");
+    }
+    public void visit(Image image) {
+        System.out.println("Exporting Image to HTML: <img src='" + image.getFileName() + "'/>");
+    }
+    public void visit(Table table) {
+        System.out.println("Exporting Table to HTML: <table rows='" + table.getRows() + "'/>");
+    }
+}
+
+// Element
+interface DocumentElement {
+    void accept(DocumentVisitor visitor);
+}
+
+// Concrete Elements
+class Text implements DocumentElement {
+    private String content;
+    public Text(String content) { this.content = content; }
+    public String getContent() { return content; }
+    public void accept(DocumentVisitor visitor) { visitor.visit(this); }
+}
+
+class Image implements DocumentElement {
+    private String fileName;
+    public Image(String fileName) { this.fileName = fileName; }
+    public String getFileName() { return fileName; }
+    public void accept(DocumentVisitor visitor) { visitor.visit(this); }
+}
+
+class Table implements DocumentElement {
+    private int rows;
+    public Table(int rows) { this.rows = rows; }
+    public int getRows() { return rows; }
+    public void accept(DocumentVisitor visitor) { visitor.visit(this); }
+}
+
+// Client
+public class VisitorPatternDemo {
+    public static void main(String[] args) {
+        DocumentElement[] document = {
+            new Text("Hello World"),
+            new Image("design.png"),
+            new Table(5)
+        };
+
+        DocumentVisitor renderVisitor = new RenderVisitor();
+        DocumentVisitor exportVisitor = new ExportVisitor();
+
+        System.out.println("=== Rendering Document ===");
+        for (DocumentElement element : document) {
+            element.accept(renderVisitor);
+        }
+
+        System.out.println("\n=== Exporting Document ===");
+        for (DocumentElement element : document) {
+            element.accept(exportVisitor);
+        }
+    }
+}
+```
