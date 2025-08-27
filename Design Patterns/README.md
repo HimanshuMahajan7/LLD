@@ -1374,3 +1374,117 @@ public class VisitorPatternDemo {
     }
 }
 ```
+
+---
+
+### Memento Design Pattern
+The Memento design pattern is a behavioral pattern that enables you to save and restore an object's previous state without violating its encapsulation.
+
+* This pattern is specially meant to store the object history.
+* When we want to build **UNDO** functionality then we can go with this pattern.
+* It is also know as SNAPSHOT Design Pattern.
+* It does not expose the objects internal implementation.
+
+#### 🎯 Intent:
+* Capture and store an object’s internal state without exposing its internals.
+* Later, restore the object to this saved state (undo/rollback functionality).
+
+#### 📌 Participants / Components:
+* **`Originator`** → The object whose state we want to save/restore, or let say we want to maintain the history.
+* **`Memento`** → Stores the internal state of Originator, or say holds the state of Originator.
+* **`Caretaker`** → Manages Mementos but does not modify them.
+
+#### 🏆 Advantages:
+* ✔ Provides undo/rollback functionality.
+* ✔ Keeps object encapsulation (no need to expose internal state).
+* ✔ Clean separation of responsibilities (Originator vs Caretaker).
+
+#### ⚠️ Disadvantages:
+* ❌ If state is huge, storing many mementos may cause high memory usage.
+* ❌ Managing history can get complex in large systems.
+
+#### 💡 Real-World Use Cases:
+* Browser Tabs (close/reopen)
+* Text editors (Undo/Redo).
+* Games (Save/Load checkpoints).
+* Databases (Transaction rollback).
+* IDE refactoring tools (Restore project to earlier state).
+
+
+#### 📌 Code Example:
+Text Editor 📖 (Undo Feature)
+```java
+// Memento - stores state
+class TextMemento {
+    private final String state;
+    public TextMemento(String state) {
+        this.state = state;
+    }
+    public String getSavedState() {
+        return state;
+    }
+}
+
+// Originator - the object whose state we want to save/restore
+class TextEditor {
+    private String text = "";
+
+    public void write(String newText) {
+        text += newText;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    // Save current state to Memento
+    public TextMemento save() {
+        return new TextMemento(text);
+    }
+
+    // Restore state from Memento
+    public void restore(TextMemento memento) {
+        this.text = memento.getSavedState();
+    }
+}
+
+// Caretaker - manages saved states
+import java.util.Stack;
+class History {
+    private Stack<TextMemento> history = new Stack<>();
+
+    public void save(TextEditor editor) {
+        history.push(editor.save());
+    }
+
+    public void undo(TextEditor editor) {
+        if (!history.isEmpty()) {
+            editor.restore(history.pop());
+        }
+    }
+}
+
+// Client
+public class MementoPatternDemo {
+    public static void main(String[] args) {
+        TextEditor editor = new TextEditor();
+        History history = new History();
+
+        editor.write("Hello ");
+        history.save(editor);  // Save 1
+
+        editor.write("World");
+        history.save(editor);  // Save 2
+
+        System.out.println("Current Text: " + editor.getText());
+
+        history.undo(editor);
+        System.out.println("After Undo: " + editor.getText());
+
+        history.undo(editor);
+        System.out.println("After Undo Again: " + editor.getText());
+    }
+}
+```
+
+---
