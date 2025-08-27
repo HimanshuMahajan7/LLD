@@ -1596,3 +1596,106 @@ Output:
 ```
 
 ---
+
+### Interpreter Design Pattern
+
+Defines a grammar for a language and provides an interpreter to evaluate sentences in that language.
+* Used when you have repeatedly occurring problems expressed in a language-like format.
+* Each grammar rule becomes a class.
+
+#### 🛠 Participants / Components:
+* **Abstract Expression** → Defines the interface for all expressions.
+* **Terminal Expression** → Implements interpretation for basic symbols.
+* **Non-terminal Expression** → Represents grammar rules composed of other expressions.
+* **Context** → Contains information that is global to the interpreter.
+* **Client** → Builds the expression tree and invokes interpretation.
+
+#### 🏆 Advantages:
+* ✔ Useful for DSLs (Domain-Specific Languages).
+* ✔ Makes it easy to extend the grammar (just add new Expression classes).
+* ✔ Clean separation of grammar rules into classes.
+
+#### ⚠️ Disadvantages:
+* ❌ Class explosion (many classes for each grammar rule).
+* ❌ Not suitable for complex grammars (better use parser generators like ANTLR).
+
+#### 💡 Real-World Use Cases:
+* Rule engines (business rules).
+* Mathematical expression evaluators.
+* SQL query interpreters.
+* Regular expression engines.
+
+#### 📖 Code Example:
+Simple Arithmetic Expression Evaluator ➕✖️
+* Interpret mathematical expressions like 5 + 10 and 20 - 5.
+
+```java
+// Context: carries data for interpretation
+class Context { }
+
+// Abstract Expression
+interface Expression {
+    int interpret(Context context);
+}
+
+// Terminal Expression: Number
+class NumberExpression implements Expression {
+    private int number;
+
+    public NumberExpression(int number) {
+        this.number = number;
+    }
+
+    @Override
+    public int interpret(Context context) {
+        return number;
+    }
+}
+
+// Non-Terminal Expression: Addition
+class AddExpression implements Expression {
+    private Expression left, right;
+
+    public AddExpression(Expression left, Expression right) {
+        this.left = left;
+        this.right = right;
+    }
+
+    @Override
+    public int interpret(Context context) {
+        return left.interpret(context) + right.interpret(context);
+    }
+}
+
+// Non-Terminal Expression: Subtraction
+class SubtractExpression implements Expression {
+    private Expression left, right;
+
+    public SubtractExpression(Expression left, Expression right) {
+        this.left = left;
+        this.right = right;
+    }
+
+    @Override
+    public int interpret(Context context) {
+        return left.interpret(context) - right.interpret(context);
+    }
+}
+
+// Client
+public class InterpreterDemo {
+    public static void main(String[] args) {
+        Context context = new Context();
+
+        // Expression: (5 + 10) - (3 + 2)
+        Expression expression = new SubtractExpression(
+                new AddExpression(new NumberExpression(5), new NumberExpression(10)),
+                new AddExpression(new NumberExpression(3), new NumberExpression(2))
+        );
+
+        System.out.println("Result = " + expression.interpret(context));  // Output: 10
+    }
+}
+```
+
+---
