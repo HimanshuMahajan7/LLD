@@ -1410,7 +1410,6 @@ The Memento design pattern is a behavioral pattern that enables you to save and 
 * Databases (Transaction rollback).
 * IDE refactoring tools (Restore project to earlier state).
 
-
 #### 📌 Code Example:
 Text Editor 📖 (Undo Feature)
 ```java
@@ -1485,6 +1484,115 @@ public class MementoPatternDemo {
         System.out.println("After Undo Again: " + editor.getText());
     }
 }
+```
+
+---
+
+### Template Method Design Pattern
+
+Define the skeleton of an algorithm in a method, deferring some steps to subclasses.
+* Ensures the algorithm structure is fixed.
+* Allows subclasses to override only specific parts without changing the overall flow.
+
+#### 📌 Key Idea
+* Abstract class defines the template method (algorithm’s structure).
+* Concrete subclasses provide implementation for the variable parts.
+
+#### 🛠 Participants
+* Abstract Class → Defines the template method & abstract steps.
+* Concrete Class → Implements the abstract steps.
+
+#### When to use (Identify):
+* When you want all the classes to follow the specific steps to process the task.
+* But also need to provide the flexibility that each class have thir own logic in that specific steps.
+
+#### 🏆 Advantages
+* ✔ Reuse of algorithm structure.
+* ✔ Promotes code consistency across subclasses.
+* ✔ Encourages inversion of control (parent controls structure, child customizes behavior).
+
+#### ⚠️ Disadvantages
+* ❌ Restrictive if subclasses need different algorithm structures.
+* ❌ Increases inheritance usage (less flexible than composition sometimes).
+
+#### 💡 Real-World Use Cases
+* Frameworks & libraries (e.g., JUnit setUp() / tearDown()).
+* Parsing algorithms.
+* UI rendering frameworks.
+* Building workflows where steps are fixed but details vary.
+
+#### 📌 Code Example: 
+Preparing a Beverage ☕🍵
+```java
+// Abstract Class
+abstract class Beverage {
+    
+    // Template Method (final to prevent overriding)
+    public final void prepareRecipe() {
+        boilWater();
+        brew();
+        pourInCup();
+        addCondiments();
+    }
+
+    private void boilWater() {
+        System.out.println("Boiling water");
+    }
+
+    private void pourInCup() {
+        System.out.println("Pouring into cup");
+    }
+
+    // Steps left to subclasses
+    protected abstract void brew();
+    protected abstract void addCondiments();
+}
+
+// Concrete Class: Tea
+class Tea extends Beverage {
+    protected void brew() {
+        System.out.println("Steeping the tea");
+    }
+    protected void addCondiments() {
+        System.out.println("Adding lemon");
+    }
+}
+
+// Concrete Class: Coffee
+class Coffee extends Beverage {
+    protected void brew() {
+        System.out.println("Dripping coffee through filter");
+    }
+    protected void addCondiments() {
+        System.out.println("Adding sugar and milk");
+    }
+}
+
+// Client
+public class TemplateMethodDemo {
+    public static void main(String[] args) {
+        Beverage tea = new Tea();
+        tea.prepareRecipe();
+
+        System.out.println("-----");
+
+        Beverage coffee = new Coffee();
+        coffee.prepareRecipe();
+    }
+}
+
+Output:
+/*
+    Boiling water
+    Steeping the tea
+    Pouring into cup
+    Adding lemon
+    -----
+    Boiling water
+    Dripping coffee through filter
+    Pouring into cup
+    Adding sugar and milk
+*/
 ```
 
 ---
