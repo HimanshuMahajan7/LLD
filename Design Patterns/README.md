@@ -1699,3 +1699,113 @@ public class InterpreterDemo {
 ```
 
 ---
+
+### Object Pool Design Pattern
+
+The **Object Pool Pattern** is a *`creational design`* pattern that allows you to reuse objects that are expensive to create, instead of creating and destroying them repeatedly.
+
+It aims to improve performance and reduce resource consumption by maintaining a pool of ready-to-use objects, rather than creating new ones on demand. 
+
+Think of it as a pool of reusable resources (like a swimming pool 🏊):
+* Objects are borrowed from the pool.
+* After use, they are returned instead of being destroyed.
+
+#### 📌 Components:
+* **Resource/Reusable Object** → The actual resource (e.g., DB connection, thread, socket).
+* **Pool** → Manages available and in-use objects.
+* **Client** → Borrows and returns objects to the pool.
+
+#### 🏆 Advantages:
+* ✔ Improves performance (no repeated expensive creation).
+* ✔ Efficient resource management.
+* ✔ Useful when object creation is costly (DB connections, threads, sockets).
+* ✔ Reducethe the overhead of creating and destroying the frequently required objects.
+* ✔ Reducethe latency, as it uses the pre initialized objects.
+
+#### ⚠️ Disadvantages:
+* ❌ Extra complexity (must handle concurrency, lifecycle).
+* ❌ Risk of stale/dirty objects if not reset properly.
+* ❌ Overhead of maintaining pool logic.
+* ❌ Resource leakage can happen, if object is not hadled properly and not being returned to the pool.
+* ❌ Required more memory because of managing the pool.
+* ❌ Pool management reuired thread safety, which is additional overhead.
+
+#### 💡 Real-World Use Cases:
+* Database Connection Pool (JDBC, HikariCP).
+* Thread Pool (Java Executors).
+* Socket Pool (network applications).
+* Memory/cache management.
+
+#### 🛠 Code Example:
+Database Connection Pool
+```java
+import java.util.*;
+
+class Connection {
+    private String id;
+    private boolean inUse;
+
+    public Connection(String id) {
+        this.id = id;
+    }
+
+    public String getId() { return id; }
+    public boolean isInUse() { return inUse; }
+    public void setInUse(boolean inUse) { this.inUse = inUse; }
+
+    public void connect() {
+        System.out.println("Using connection: " + id);
+    }
+}
+
+class ConnectionPool {
+    private List<Connection> availableConnections = new ArrayList<>();
+    private List<Connection> usedConnections = new ArrayList<>();
+    private static final int MAX_POOL_SIZE = 5;
+
+    public ConnectionPool() {
+        for (int i = 1; i <= MAX_POOL_SIZE; i++) {
+            availableConnections.add(new Connection("Conn-" + i));
+        }
+    }
+
+    // Borrow connection
+    public synchronized Connection getConnection() {
+        if (availableConnections.isEmpty()) {
+            throw new RuntimeException("No connections available!");
+        }
+        Connection conn = availableConnections.remove(availableConnections.size() - 1);
+        conn.setInUse(true);
+        usedConnections.add(conn);
+        return conn;
+    }
+
+    // Return connection
+    public synchronized void releaseConnection(Connection conn) {
+        conn.setInUse(false);
+        usedConnections.remove(conn);
+        availableConnections.add(conn);
+    }
+}
+
+// Client
+public class ObjectPoolDemo {
+    public static void main(String[] args) {
+        ConnectionPool pool = new ConnectionPool();
+
+        // Borrow connections
+        Connection c1 = pool.getConnection();
+        c1.connect();
+
+        Connection c2 = pool.getConnection();
+        c2.connect();
+
+        // Return one connection
+        pool.releaseConnection(c1);
+
+        // Borrow again (reused)
+        Connection c3 = pool.getConnection();
+        c3.connect();
+    }
+}
+```
